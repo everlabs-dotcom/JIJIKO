@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jijiko — Order without the wait</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap');
+
+  :root{
+    --paper:#F5F0E6;
+    --paper-dark:#EAE2D1;
+    --ink:#2C2117;
+    --coffee:#3B2A20;
+    --amber:#C98A2C;
+    --amber-dark:#A66F1F;
+    --green:#4B6B4F;
+    --line:#D8CDB8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    line-height:1.5;
+  }
+  .wrap{max-width:880px;margin:0 auto;padding:0 24px;}
+
+  /* Perforated receipt-edge signature element */
+  .receipt-edge{
+    height:14px;
+    background:
+      radial-gradient(circle at 10px 0, transparent 7px, var(--paper) 7px) 0 0/20px 14px repeat-x;
+  }
+  .receipt-edge.flip{transform:rotate(180deg);}
+
+  header{
+    background:var(--coffee);
+    color:var(--paper);
+    padding:64px 0 40px;
+  }
+  header .wrap{display:flex;flex-direction:column;gap:28px;}
+  .eyebrow{
+    font-family:'Space Mono',monospace;
+    font-size:12px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--amber);
+  }
+  .wordmark{
+    font-family:'Space Mono',monospace;
+    font-size:13px;
+    letter-spacing:0.2em;
+    color:var(--paper);
+    border:1px solid rgba(245,240,230,0.35);
+    padding:5px 10px;
+    width:fit-content;
+    display:inline-block;
+  }
+  h1{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:clamp(38px,6vw,64px);
+    line-height:1.05;
+    max-width:14ch;
+  }
+  .sub{
+    font-size:17px;
+    max-width:46ch;
+    color:#E7DFCF;
+  }
+  .receipt-chip{
+    font-family:'Space Mono',monospace;
+    font-size:13px;
+    display:inline-flex;
+    gap:10px;
+    align-items:center;
+    background:rgba(245,240,230,0.08);
+    border:1px dashed rgba(245,240,230,0.35);
+    padding:10px 16px;
+    border-radius:2px;
+    width:fit-content;
+  }
+  .receipt-chip .dot{width:6px;height:6px;border-radius:50%;background:var(--green);}
+
+  .cta{
+    display:inline-block;
+    background:var(--amber);
+    color:var(--coffee);
+    font-weight:600;
+    padding:14px 26px;
+    border-radius:2px;
+    text-decoration:none;
+    font-size:15px;
+    width:fit-content;
+    transition:background 0.15s ease;
+  }
+  .cta:hover{background:var(--amber-dark);}
+  .cta.secondary{
+    background:transparent;
+    border:1px solid rgba(245,240,230,0.4);
+    color:var(--paper);
+  }
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap;}
+
+  section{padding:56px 0;}
+  section.paper-dark{background:var(--paper-dark);}
+
+  .section-label{
+    font-family:'Space Mono',monospace;
+    font-size:12px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--amber-dark);
+    margin-bottom:10px;
+  }
+  h2{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:clamp(26px,4vw,36px);
+    margin-bottom:8px;
+  }
+  .lede{max-width:56ch;color:#5A4B3A;margin-bottom:36px;}
+
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;}
+  .step{
+    border-left:2px solid var(--line);
+    padding-left:18px;
+  }
+  .step .num{
+    font-family:'Space Mono',monospace;
+    font-size:13px;
+    color:var(--amber-dark);
+  }
+  .step h3{
+    font-family:'Fraunces',serif;
+    font-size:19px;
+    margin:6px 0 6px;
+  }
+  .step p{font-size:14px;color:#5A4B3A;}
+
+  .roles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);}
+  .role{background:var(--paper);padding:24px;}
+  .role h3{font-family:'Fraunces',serif;font-size:17px;margin-bottom:8px;}
+  .role p{font-size:13.5px;color:#5A4B3A;}
+
+  .tz-strip{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+  .tz-tag{
+    font-family:'Space Mono',monospace;
+    font-size:12.5px;
+    border:1px solid var(--line);
+    padding:8px 14px;
+    border-radius:2px;
+    background:var(--paper);
+  }
+
+  footer{
+    background:var(--coffee);
+    color:var(--paper);
+    padding:56px 0 40px;
+  }
+  footer h2{color:var(--paper);}
+  footer .lede{color:#CBB99C;}
+  .ask{
+    font-family:'Space Mono',monospace;
+    font-size:13px;
+    color:#CBB99C;
+    margin-top:28px;
+  }
+
+  @media (max-width:600px){
+    header{padding:48px 0 32px;}
+    section{padding:40px 0;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <span class="wordmark">JIJIKO</span>
+    <span class="eyebrow">An idea, not a finished product — yet</span>
+    <h1>Order without the wait.</h1>
+    <p class="sub">Jijiko is a QR-code ordering system built for cafés and small restaurants in Dar es Salaam — scan the code on your table, order, and watch it come to you. No app to download, no flagging down a waiter.</p>
+    <div class="receipt-chip"><span class="dot"></span>TABLE 04 · ORDER #A182 · READY IN 6 MIN</div>
+    <div class="cta-row">
+      <a class="cta" href="https://wa.me/255XXXXXXXXX?text=Hi%2C%20I%27d%20like%20to%20try%20Jijiko" target="_blank" rel="noopener">I want to test it</a>
+      <a class="cta secondary" href="https://forms.gle/YOUR_FORM_ID" target="_blank" rel="noopener">Just give feedback</a>
+    </div>
+  </div>
+</header>
+
+<div class="receipt-edge" style="background-color:var(--coffee)"></div>
+
+<section>
+  <div class="wrap">
+    <p class="section-label">See it in action</p>
+    <h2>60 seconds, start to finish</h2>
+    <p class="lede">Scan, order, and track — recorded on an actual phone at an actual table.</p>
+    <!-- Replace YOUR_VIDEO_ID with your YouTube video ID (the part after v= or youtu.be/) -->
+    <iframe
+      style="width:100%; max-width:640px; aspect-ratio:16/9; border:none; border-radius:2px; display:block;"
+      src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
+      title="Jijiko demo"
+      allow="autoplay; encrypted-media"
+      allowfullscreen>
+    </iframe>
+  </div>
+</section>
+
+<section style="padding-top:0;">
+  <div class="wrap">
+    <hr style="border:none; border-top:1px solid var(--line); margin-bottom:40px;">
+    <p class="section-label">How it works</p>
+    <h2>Three steps, no queueing</h2>
+    <p class="lede">Built around how people actually behave at a table — phone in hand, in no mood to wait for a waiter to be free.</p>
+    <div class="steps">
+      <div class="step">
+        <span class="num">01</span>
+        <h3>Scan the table</h3>
+        <p>Every table has its own QR code. Scan it and the menu opens straight to that table — no login required.</p>
+      </div>
+      <div class="step">
+        <span class="num">02</span>
+        <h3>Order and customize</h3>
+        <p>Pick items, adjust sugar, size, or add notes. Order solo or open the table to friends ordering together.</p>
+      </div>
+      <div class="step">
+        <span class="num">03</span>
+        <h3>Track it live</h3>
+        <p>Watch the order move from kitchen to your table in real time, and pay by cash or in-app when it arrives.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="paper-dark">
+  <div class="wrap">
+    <p class="section-label">Behind the counter</p>
+    <h2>Everyone on staff gets their own view</h2>
+    <p class="lede">Not just a customer menu — a full flow from kitchen to till.</p>
+    <div class="roles">
+      <div class="role">
+        <h3>Kitchen</h3>
+        <p>Cooks see incoming orders the moment they're placed and mark them ready without touching paper tickets.</p>
+      </div>
+      <div class="role">
+        <h3>Floor staff</h3>
+        <p>Attendants see what's ready to deliver, handle cash payments, and respond to table assistance calls.</p>
+      </div>
+      <div class="role">
+        <h3>Owner</h3>
+        <p>One dashboard for the menu, staff, sales, and daily reports — from a phone or a laptop.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="section-label">Built for here, not adapted from somewhere else</p>
+    <h2>Made with Tanzania in mind</h2>
+    <p class="lede">Most ordering software is built for a different market and bolted on afterward. This one starts from what a Dar es Salaam café actually needs.</p>
+    <div class="tz-strip">
+      <span class="tz-tag">18% VAT handled automatically</span>
+      <span class="tz-tag">Cash and in-app payment</span>
+      <span class="tz-tag">Receipt printing at the counter</span>
+      <span class="tz-tag">Works on any phone camera</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p class="section-label" style="color:var(--amber)">Where it stands today</p>
+    <h2>Early, honest, and looking for real opinions</h2>
+    <p class="lede">This is a working prototype, not a finished business. I'm looking for a handful of people — café owners, friends, anyone who eats out — to try it and tell me honestly what's confusing, missing, or actually useful.</p>
+    <div class="cta-row">
+      <a class="cta" href="https://wa.me/255XXXXXXXXX?text=Hi%2C%20I%27d%20like%20to%20try%20Jijiko" target="_blank" rel="noopener">I want to test it</a>
+      <a class="cta secondary" href="https://forms.gle/YOUR_FORM_ID" target="_blank" rel="noopener">Just give feedback</a>
+    </div>
+    <p class="ask">— Thomas, Dar es Salaam</p>
+  </div>
+</footer>
+
+</body>
+</html>
